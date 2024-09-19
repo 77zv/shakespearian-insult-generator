@@ -17,6 +17,10 @@ FileException::FileException(const std::string &message) : std::runtime_error(me
 
 NumInsultsOutOfBounds::NumInsultsOutOfBounds(const std::string &message) : std::runtime_error(message) {}
 
+/**
+ * @brief Initializes the InsultGenerator by reading insults from a file.
+ * @throws FileException if there's an error opening or reading the file.
+ */
 void InsultGenerator::initialize()
 {
     std::ifstream file("InsultsSource.txt");
@@ -55,6 +59,11 @@ void InsultGenerator::initialize()
     }
 }
 
+/**
+ * @brief Generates a single random insult.
+ * @return A string containing the generated insult.
+ * @throws FileException if the insult columns are not properly initialized.
+ */
 std::string InsultGenerator::talkToMe() const {
     if (columns.size() != 3 || columns[0].empty() || columns[1].empty() || columns[2].empty()) {
         throw FileException("Insult columns are not properly initialized");
@@ -76,6 +85,12 @@ std::string InsultGenerator::talkToMe() const {
     return word;
 }
 
+/**
+ * @brief Generates a specified number of unique insults.
+ * @param num The number of insults to generate.
+ * @return A vector of strings containing the generated insults.
+ * @throws NumInsultsOutOfBounds if the requested number of insults is out of the valid range.
+ */
 std::vector<std::string> InsultGenerator::generate(int num) const {
     if (num < 1 || num > 10000) {
         throw NumInsultsOutOfBounds("Number of insults out of bounds");
@@ -90,6 +105,13 @@ std::vector<std::string> InsultGenerator::generate(int num) const {
     return insults;
 }
 
+/**
+ * @brief Generates a specified number of insults and saves them to a file.
+ * @param filename The name of the file to save the insults to.
+ * @param num The number of insults to generate.
+ * @throws FileException if there's an error opening the file for writing.
+ * @throws NumInsultsOutOfBounds if the requested number of insults is out of the valid range.
+ */
 void InsultGenerator::generateAndSave(std::string filename, int num) const {
     std::ofstream file(filename);
     if (!file.is_open()) {
