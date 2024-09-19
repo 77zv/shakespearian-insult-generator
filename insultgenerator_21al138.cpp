@@ -36,6 +36,10 @@ void InsultGenerator::initialize()
         {
             if (std::getline(iss, word, '\t'))
             {
+                // Remove any trailing whitespace, including newline characters
+                word.erase(std::find_if(word.rbegin(), word.rend(), [](unsigned char ch) {
+                    return !std::isspace(ch);
+                }).base(), word.end());
                 columns[i].push_back(word);
             }
             else
